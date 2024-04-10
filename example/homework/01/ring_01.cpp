@@ -20,11 +20,6 @@ int main(int argc, char* argv[])
     MPI_Comm_size(MPI_COMM_WORLD, &procs);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    if (rank == 0) {
-        ring_num = 0;
-        MPI_Send(&ring_num, 1, MPI_INT, 1, 0, MPI_COMM_WORLD);
-    }
-
     while(1)
     {
         if (rank == 0) {

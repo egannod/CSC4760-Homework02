@@ -1,7 +1,10 @@
+// hpcshell --cpus-per-task=2 --gres=gpu --account=csc4760-001-2024s
+// spack load kokkos~cuda+openmpi%gcc@12 openmpi@4.1.5
 using namespace std;
 #include <iostream>
 #include <assert.h>
 #include <string>
+#include <cmath>
 
 #include <mpi.h>
 
@@ -79,15 +82,21 @@ int main(int argc, char **argv)
 void parallel_code(int M, int N, int iterations, int size, int myrank, MPI_Comm comm)
 {
   // use the linear, load-balanced distribution:
-  //int nominal = M / size; int extra = M % size;
+  //int nominal = M / size;
+  //int extra = M % size;
   //int m = (myrank < extra) ? (nominal+1) : nominal;
   //int n = N; // 1D decomposition, no concurrency in column dimension
   int numSubM = sqrt(size);
   int numSubN = sqrt(size);
   int subM = M / numSubM;
   int subN = N / numSubN;
-  int subMStart = (myrank / numSubN) * subM;
-  int subNStart = (myrank % numSubN) * subN;
+  int subMStart = (myrank / numSubM) * subM;
+  int subNStart = (myrank / numSubN) * subN;
+
+  if (mySubM == numSubM - 1)
+    subM += M % numSubM;
+  if (mySubN == numSubN - 1)
+    subN += N % numSubN;
   
   Domain even_domain(subM,subN,"even Domain");
   Domain odd_domain(subM,subN,"odd Domain");

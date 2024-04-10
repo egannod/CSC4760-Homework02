@@ -3,7 +3,7 @@
 
 int main(int argc, char** argv)
 {
-    int rank, size=4;
+    int rank, size;
     int color1, color2;
     MPI_Comm new_comm1, new_comm2;
 
