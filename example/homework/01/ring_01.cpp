@@ -20,22 +20,16 @@ int main(int argc, char* argv[])
     MPI_Comm_size(MPI_COMM_WORLD, &procs);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    if (rank == 0){
-        ring_num = 0;
-
-        MPI_Send(&ring_num, 1, MPI_INT, 1, 0, MPI_COMM_WORLD);
-    }
-
     while(1)
     {
         if (rank == 0) {
-            MPI_Recv(&ring_num, 1, MPI_INT, procs-1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            MPI_Send(&ring_num, 1, MPI_INT, 1, 0, MPI_COMM_WORLD);
             if (ring_num/(procs-1) == N) {
                 MPI_Send(&stop, 1, MPI_INT, 1, 0, MPI_COMM_WORLD);
                 break;
             }
+            MPI_Recv(&ring_num, 1, MPI_INT, procs-1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
             ring_num++;
-            MPI_Send(&ring_num, 1, MPI_INT, 1, 0, MPI_COMM_WORLD);
         }
         else {
             MPI_Recv(&ring_num, 1, MPI_INT, rank-1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
