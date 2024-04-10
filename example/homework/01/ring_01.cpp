@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
     while(1)
     {
         if (rank == 0) {
-            MPI_Send(&ring_num, 1, MPI_INT, 1, 0, MPI_COMM_WORLD);
+            MPI_Send(&ring_num, 1, MPI_INT, 2, 0, MPI_COMM_WORLD);
             if (ring_num/(procs-1) == N) {
                 MPI_Send(&stop, 1, MPI_INT, 1, 0, MPI_COMM_WORLD);
                 break;
