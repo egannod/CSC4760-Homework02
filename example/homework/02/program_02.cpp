@@ -92,11 +92,6 @@ void parallel_code(int M, int N, int iterations, int size, int myrank, MPI_Comm 
   int subN = N / numSubN;
   int subMStart = (myrank / numSubM) * subM;
   int subNStart = (myrank / numSubN) * subN;
-
-  if (mySubM == numSubM - 1)
-    subM += M % numSubM;
-  if (mySubN == numSubN - 1)
-    subN += N % numSubN;
   
   Domain even_domain(subM,subN,"even Domain");
   Domain odd_domain(subM,subN,"odd Domain");
